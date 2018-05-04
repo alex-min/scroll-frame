@@ -16,14 +16,19 @@
 
       // Ignore if the element doesnt match our selector
       var els = document.querySelectorAll(selector);
-      var elMatchesSelector = (window.Array || Array) // Hack for Zombie testing
-        .prototype.filter.call(els, function(el) {
-          return el == e.target || el.contains(e.target);
+      var href = null;
+      var elMatchesSelector = (window.Array || Array).prototype.filter.call(els, function(el) {
+
+          var matched = el == e.target || el.contains(e.target);
+          if (matched) {
+            href = el.getAttribute('href');
+          };
+          return matched;
         }).length > 0
       if (!elMatchesSelector) return;
 
       // Get the href & open the iframe on that url
-      var href = e.target.href || e.target.parentNode.href;
+      href = href || e.target.href || e.target.parentNode.href;
       if (href) {
         e.preventDefault();
         openIframe(href);
